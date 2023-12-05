@@ -27,28 +27,27 @@ dropdown.addEventListener('click', () => {
 
 
 //generar paises al inicio
-export function generarPaises() {
+export function generarPaises(data) {
     const generatedData = []
-    fetch('./data.json')
-        .then(res => res.json()).
-        then(data => {
+    
             
-            for (let i = 0; i < 250; i++) {
-                const x = data.countrys[i]
+            for (let i = 0; i < data.length; i++) {
+                const x = data[i]
                 generatedData.push(x)
             }
+
             Article(generatedData)
             localStorage.setItem('Country', JSON.stringify(main.innerHTML))
 
 
-        }).then(() => {
+        
             const articles = document.querySelectorAll('.article')
-            const main = document.querySelector('.main')
-            const generatedData = [];
+        
+
             articles.forEach(x => {
                 x.addEventListener('click', (e) => {
+                    console.log('ha')
                     const art = e.currentTarget
-                    generatedData.push(x);
                     const h3 = art.querySelector('h3').innerText
                     buscarIndice(h3).then(res => {
                         Details(res)
@@ -58,10 +57,10 @@ export function generarPaises() {
 
 
             })
-        })
+        
     }
 
-    generarPaises()
+    fetch('./data.json').then(res=>res.json()).then(data=>generarPaises(data.countrys))
 
     //Buscar indice del pais
     async function buscarIndice(title) {

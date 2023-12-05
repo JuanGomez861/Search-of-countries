@@ -21,7 +21,7 @@ function mostrarDetail(r){
             
             main.innerHTML=JSON.parse(localStorage.getItem('Country'))
             generarPaises()
-            
+            console.log(main.innerHTML)
         })
         
     })
