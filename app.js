@@ -1,122 +1,100 @@
-import { Details } from "./Details.js"
-const options = document.querySelectorAll('.option')
-const filter = document.querySelector('.filter')
-const countrys = document.querySelector('.countrys')
+//cosas por terminar:
+//Dark-mode
+
+
+
+import { Details } from "./modulos/Details.js"
+import { eventdropDown } from "./modulos/filter.js"
+import { handlesubmit } from "./modulos/busquedas.js"
 const main = document.querySelector('.main')
 
-
-const dropdown = document.querySelector('.select_container')
-const dropDownC = document.querySelector('.options')
-let abierto = false
-dropdown.addEventListener('click', () => {
-    console.log(Response)
-    if (abierto) {
-        abierto = !abierto
-        dropDownC.classList.remove('options_visible')
-        options.forEach(option => {
-            option.addEventListener('click', (e) => {
-                filter.innerText = e.target.innerText
-            })
-        })
-    } else {
-        abierto = !abierto
-        dropDownC.classList.add('options_visible')
-    }
-
-})
+eventdropDown()
+handlesubmit()
+peticion().then(data => generarPaises(data))//genera todos lso paises al inicio
 
 
-//generar paises al inicio
+
+
+
+
 export function generarPaises(data) {
+    //recibe arrgo con los paises a generar
     const generatedData = []
+
+
+    for (let i = 0; i < data.length; i++) {
+        const x = data[i]
+        generatedData.push(x)
+    }
+
+    Article(generatedData)
+    //guardar
+    localStorage.setItem('Country', JSON.stringify(main.innerHTML))
+    //se encarga de activar el evento del  articl para mostar details
+    articleDetails()
+
+
+}
+//se encarga de asignar el evento para mostrar el detail a cada articulo
+export function articleDetails() {
+    const articles = document.querySelectorAll('.article')
+    articles.forEach(x => {
+        //mostart details al hacer click a cada articulo 
+        x.addEventListener('click', (e) => {
+            //recuperar el titulo
+            const art = e.currentTarget
+            const h3 = art.querySelector('h3').innerText
+            peticion()
+            .then(res=>res.findIndex(x=>x.name.common==h3))
+            .then(data=>Details(data))
+        })
+
+
+
+    })
+}
+
+//Crear pelicula
+function Article(x) {
+    //espera una arreglo con los peliculas que debe cargar
+    console.log(x)
+    const countrys = document.querySelector('.countrys')
+    for (let i = 0; i < x.length; i++) {
+        const fragment = document.createDocumentFragment()
+        const article = document.createElement('article')
+        article.classList.add('article')
+        const figure = document.createElement('figure')
+        const img = document.createElement('img')
+        img.setAttribute('src', x[i].flags.png)
+        img.setAttribute('alt', x[i].name.common)
+        figure.appendChild(img)
+        figure.classList.add('poster')
+        article.appendChild(figure)
+        const text = document.createElement('div')
+        text.classList.add('text')
+        const h3 = document.createElement('h3')
+        h3.innerText = x[i].name.common
+        text.appendChild(h3)
+        const popularidad = document.createElement('p')
+        popularidad.innerText = `Populations: ${x[i].population}`
+        text.appendChild(popularidad)
+        const region = document.createElement('p')
+        region.innerText = `Region: ${x[i].region}`
+        text.appendChild(region)
+        const capital = document.createElement('p')
+        capital.innerText = `Capital: ${x[i].capital}`
+        text.appendChild(capital)
+        article.appendChild(text)
+        fragment.appendChild(article)
+        countrys.appendChild(fragment)
+    }
+}
+
+export async function peticion() {
     
-            
-            for (let i = 0; i < data.length; i++) {
-                const x = data[i]
-                generatedData.push(x)
-            }
-
-            Article(generatedData)
-            localStorage.setItem('Country', JSON.stringify(main.innerHTML))
-
-
-        
-            const articles = document.querySelectorAll('.article')
-        
-
-            articles.forEach(x => {
-                x.addEventListener('click', (e) => {
-                    console.log('ha')
-                    const art = e.currentTarget
-                    const h3 = art.querySelector('h3').innerText
-                    buscarIndice(h3).then(res => {
-                        Details(res)
-                    })
-                })
-
-
-
-            })
-        
-    }
-
-    fetch('./data.json').then(res=>res.json()).then(data=>generarPaises(data.countrys))
-
-    //Buscar indice del pais
-    async function buscarIndice(title) {
-        const res = await fetch('./data.json')
+        const res = await fetch('https://restcountries.com/v3.1/all')
         const data = await res.json()
-        let indice = null
-        for (let i = 0; i < data.countrys.length; i++) {
-            if (data.countrys[i].name==title) {
-                indice = i
-            }
-        }
-        return indice
-
-    }
-    console.log('h')
-
-
-
-    //Crear pelicula
-    function Article(x) {
-        for (let i = 0; i < x.length; i++) {
-            const fragment = document.createDocumentFragment()
-            const article = document.createElement('article')
-            article.classList.add('article')
-            const figure = document.createElement('figure')
-            const img = document.createElement('img')
-            img.setAttribute('src', x[i].flag)
-            img.setAttribute('alt', x[i].name)
-            figure.appendChild(img)
-            figure.classList.add('poster')
-            article.appendChild(figure)
-            const text = document.createElement('div')
-            text.classList.add('text')
-            const h3 = document.createElement('h3')
-            h3.innerText = x[i].name
-            text.appendChild(h3)
-            const popularidad = document.createElement('p')
-            popularidad.innerText = `Populations: ${x[i].population}`
-            text.appendChild(popularidad)
-            const region = document.createElement('p')
-            region.innerText = `Region: ${x[i].region}`
-            text.appendChild(region)
-            const capital = document.createElement('p')
-            capital.innerText = `Capital: ${x[i].capital}`
-            text.appendChild(capital)
-            article.appendChild(text)
-            fragment.appendChild(article)
-            countrys.appendChild(fragment)
-        }
-    }
-
-
-
-
-
-
-
-
-
+        return data
+        
+    
+}

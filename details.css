@@ -1,0 +1,11 @@
+*{
+    box-sizing: border-box;
+}
+.mian_details{
+    width: 100%;
+    max-width: 1200px;
+    background-color: red;
+}
+.details{
+    display: flex;
+}
