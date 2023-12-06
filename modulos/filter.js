@@ -1,7 +1,9 @@
-import { generarPaises, peticion } from "../app.js"
+import {  peticion } from "../app.js"
+import { generarPaises } from "./Paises.js"
 export function eventdropDown() {
     const dropdown = document.querySelector('.select_container')
     const options = document.querySelectorAll('.option')
+   
     dropdown.addEventListener('click', toggleDropdown)
     options.forEach(option => {
         option.addEventListener('click', handleOption)
@@ -11,15 +13,17 @@ export function eventdropDown() {
 let abierto = false
 function toggleDropdown() {
     const dropDownC = document.querySelector('.options')
-
+    const classDropDown=document.querySelector('#dropDown')
     if (abierto) {
         abierto = !abierto
         dropDownC.classList.remove('options_visible')
+        classDropDown.classList.remove('arrow-up')
         //asiganar evento a la opciones disponibles para filtar
 
     } else {
         abierto = !abierto
         dropDownC.classList.add('options_visible')
+        classDropDown.classList.add('arrow-up')
     }
 
 }

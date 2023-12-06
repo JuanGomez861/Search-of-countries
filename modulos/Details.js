@@ -1,10 +1,11 @@
 
-import { articleDetails, peticion } from "../app.js"
+import {  peticion } from "../app.js"
+import { articleDetails } from "./Paises.js"
 import { handlesubmit } from "./busquedas.js"
 import { eventdropDown } from "./filter.js"
 
 
-const main = document.querySelector('.main')
+
 
 
 
@@ -18,6 +19,7 @@ export function Details(indice) {
 
 
 function mostrarDetail(r) {
+    const main = document.querySelector('.main')
     fetch('./details.html').then(res => res.text())
         .then(html => generarDetail(html, r)).then(h => {
             //mostrar details
@@ -57,21 +59,31 @@ function generarDetail(html, r) {
     const top = doc.querySelector('#domain')
     const currences = doc.querySelector('#curriencies')
     const language = doc.querySelector('#language')
-
+    const boards=doc.querySelector('.boards')
     name.innerHTML = Object.keys(r.name).length==0  ? r.name : r.name.common
     native.innerHTML = Object.keys(r.name).length==0  ? r.name : r.name.common;
     population.innerHTML = r.population
     region.innerHTML = r.region
     subRegion.innerHTML = r.subregion
     capita.innerHTML = r.capital
-    top.innerHTML = r.topLevelDomain
-    currences.innerHTML = r.currences
-    let lang = ''
-    for (let i = 0; i < r.languages.length; i++) {
-        lang += `${i > 0 ? ', ' : ''}${r.languages[i].name}`
-    }
-    language.innerHTML = lang
+    top.innerHTML = r.tld
+    currences.innerHTML = Object.keys(r.currencies)
+    language.innerHTML = Object.values(r.languages)
     poster.setAttribute('src', r.flags.png)
-
+    if(r.hasOwnProperty('borders')){
+        for(let i=0;i<r.borders.length;i++){
+            const div=doc.createElement('div')
+            div.innerText=r.borders[i]
+            boards.appendChild(div)
+        }
+    }
+    else{
+        const p=doc.createElement('p')
+        p.innerText='No tiene bordes'
+        boards.appendChild(p)
+    }
+    
     return doc
 }
+
+
