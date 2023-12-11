@@ -8,7 +8,7 @@ import { eventdropDown } from "./filter.js"
 
 
 
-
+// esta funcion se en carga de encontar el pais segun el idnice que rcibio
 export function Details(indice) {
     peticion()
         .then(res => res[indice])
@@ -17,7 +17,7 @@ export function Details(indice) {
         })
 }
 
-
+// esta funcion se encarga de cargar el archivo html a los details para modificar su contenido ademas, se le asigna el evento para salir de esta seccion
 function mostrarDetail(r) {
     const main = document.querySelector('.main')
     fetch('./details.html').then(res => res.text())
@@ -40,7 +40,7 @@ function mostrarDetail(r) {
         })
 }
 
-//se encarga de genera la seccion de dedatils
+//se encarga de generar la seccion de dedatils
 function generarDetail(html, r) {
     //recibe archivo html y el objeto con los detalles del pais clickeado
 

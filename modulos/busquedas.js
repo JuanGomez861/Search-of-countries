@@ -1,6 +1,7 @@
 //Es la encargada de recupera le valor del input de filtrado
 import { peticion } from "../app.js"
 import { generarPaises } from "./Paises.js"
+
 export function handlesubmit() {
     const form = document.querySelector('form')
     const input = document.querySelector('#search')
@@ -11,6 +12,7 @@ export function handlesubmit() {
 
 }
 
+//Se encarga de buscar el pais en la peticion
 function buscar(title) {
     const countrys = document.querySelector('.countrys')
     countrys.innerHTML = 'Loading'

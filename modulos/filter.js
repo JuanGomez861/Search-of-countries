@@ -1,10 +1,11 @@
-import {  peticion } from "../app.js"
+import { peticion } from "../app.js"
 import { generarPaises } from "./Paises.js"
 export function eventdropDown() {
     const dropdown = document.querySelector('.select_container')
     const options = document.querySelectorAll('.option')
-   
+
     dropdown.addEventListener('click', toggleDropdown)
+
     options.forEach(option => {
         option.addEventListener('click', handleOption)
     })
@@ -13,7 +14,7 @@ export function eventdropDown() {
 let abierto = false
 function toggleDropdown() {
     const dropDownC = document.querySelector('.options')
-    const classDropDown=document.querySelector('#dropDown')
+    const classDropDown = document.querySelector('#dropDown')
     if (abierto) {
         abierto = !abierto
         dropDownC.classList.remove('options_visible')
@@ -41,10 +42,18 @@ function handleOption(e) {
 
 function filtrar(conten) {
     const countrys = document.querySelector('.countrys')
-    peticion()
-    .then(res =>  res.filter(x=>x.region==conten))
-    .then(data => {
-        countrys.innerHTML = ""
-        generarPaises(data)
-    })
+
+    if (conten == 'All') {
+        peticion().then(data => {
+            countrys.innerHTML = ""
+            generarPaises(data)
+        })
+    }else{
+        peticion().then(res => res.filter(x => x.region == conten))
+        .then(data => {
+            countrys.innerHTML = ""
+            generarPaises(data)
+        })
+    }
+   
 }

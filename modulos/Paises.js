@@ -12,14 +12,14 @@ export function generarPaises(data) {
     }
 
     Article(generatedData)
-    //guardar
+    //guardar informacion despues de generar paises
     localStorage.setItem('Country', JSON.stringify(main.innerHTML))
     //se encarga de activar el evento del  articl para mostar details
     articleDetails()
 
 
 }
-
+//crea seccion de paises o pais encontrado
 function Article(x) {
     //espera una arreglo con los peliculas que debe cargar
     const countrys = document.querySelector('.countrys')
@@ -79,7 +79,7 @@ function Article(x) {
     }
 }
 
-
+// sirve para la seccion de detalles de cada pais
 export function articleDetails() {
     //se encarga de asignar el evento del detail a cada articulo que se genere
     const articles = document.querySelectorAll('.article')
